@@ -1,0 +1,75 @@
+
+Entropy Calculation and Visualization
+========================================================
+author: Muhammad Anwar Sabri
+date: Novmber 16, 2015
+
+INTRODUCTION
+========================================================
+font-family: 'Garamond'
+type: section
+
+- A predictive model estimates the value of a variable (attribute) of interest -- the TARGET variable -- in a dataset
+
+- "Supervised" segmentation aims to identify patterns in a dataset by splitting the population into sub-groups such that for the target varaible:
+
+  - EACH sub-group has distinct values than other sub-groups, but
+  - similar values within the sub-group
+
+- One useful way to select informative attributes is:  ENTROPY
+
+
+
+ENTROPY -- Definition
+========================================================
+type: section
+- Entropy is a measure of "purity" of data instances in a class
+
+- Purity means how Homogenous observations are in a Class (attribute or predictive variable) with respect to the Target variable  
+
+- The most common splitting criterion is called "information gain" and is based on a purity measure called ENTROPY
+
+- Entropy can be used to objectively identify those attributes of various predictive variables in a dataset that can divide the data instances into some meaningful segments 
+
+
+ENTROPY is Calculated As:
+========================================================
+type: section
+
+- entropy = -(p$\sf{1}$ * log (p$\sf{1}$) + p$\sf{2}$ * log (p$\sf{2}$) + ...), where each p$\sf{i}$ is the probability (the relative percentage) of property i within the variable
+- So, for example, if a dataset of 100 observations can be segmented on a variable (or an attribute) into a 2-Class sub-group such that 50 data points (50% or 0.5) belong to Class 1 and the remaining (50 as well) to Class 2, then the entropy of that segementation would be 
+```{r, echo=FALSE}
+-(0.5 * log2(0.5) + 0.5 * log2(0.5))
+```
+
+- The range of Entropy is from 0 (Pure segmentation -- all belong to the same class) to 1 (equal number of data points of each class) -- with the lower the Entropy, the better (purer) class segmentation
+
+========================================================
+type: section
+
+
+- This data product helps in calculating and visualizing the entropy of a 2-class variable in 2 ways. The user can:
+  - Either enter the number of observations of each of the two classes  AND click a button to calculate Entropy, or
+  - adjust the probability (percentage) of class 1 on a slider and the interactive plot on the right will show the 'Entropy' of a 2-class variable as a function of Probability of Class 1
+
+***
+
+![Entropy Plot] (entropy.png)
+```{r, echo=FALSE}
+x <- seq(from=0, to=1, by = 0.01)
+xlab <- "p(class 1)"
+ylab <- "Entropy"
+y <- -(x * log2 (x) + (1-x)*log2(1-x))
+y[y == "NaN"]= 0
+size <- 10
+shape <- "O"
+df <- data.frame(x,y)
+z <- -(0.5 * log2(0.5) + 0.5 * log2(0.5)) * 50 + 1
+          plot(x,y, xlab = xlab, ylab = ylab, col= 'blue', main = 'Entropy')
+          points(x= x[z], y = y[z], col='Red', pch = 2, lwd = 3)
+          lines(c(0.5,x[z]), c(0,y[z]), col = "Red", lwd = 1)
+          text(0.07, 0.95, paste("p(class 1) = ", (z-1)/100))
+          text(0.07, 0.88, paste("p(class 2) = ", (101-z)/100))
+          text(0.07, 0.81, paste("Entropy = ", round(y[z], 2)))
+
+```
